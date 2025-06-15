@@ -1,0 +1,28 @@
+{
+  "name": "api-de-restaurante",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexlael/API-de-restaurante.git"
+  },
+  "author": "Alex Lael",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexlael/API-de-restaurante/issues"
+  },
+  "homepage": "https://github.com/alexlael/API-de-restaurante#readme",
+  "description": "API para gerenciar pedidos das mesas de um restaurante",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.12",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}
