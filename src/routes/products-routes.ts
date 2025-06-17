@@ -7,6 +7,7 @@ const produductsController = new ProductsController
 
 productsRoutes.get("/", produductsController.index);
 productsRoutes.post("/", produductsController.create);
+productsRoutes.put("/:id", produductsController.update);
 
 
 export { productsRoutes };
