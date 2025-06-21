@@ -32,7 +32,67 @@ class OrdersController {
         .where({ id: product_id })
         .first();
 
-      return response.status(201).json(product);
+      if (!product) {
+        throw new AppError("Product not found");
+      }
+
+      await knex<OrderRepository>("orders").insert({
+        table_session_id,
+        product_id,
+        quantity,
+        price: product.price,
+      });
+
+      return response.status(201).json();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async index(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { table_session_id } = request.params;
+      const order = await knex("orders")
+        .select(
+          "orders.id",
+          "orders.table_session_id",
+          "orders.product_id",
+          "products.name",
+          "orders.price",
+          "orders.quantity",
+          knex.raw("orders.quantity * orders.price AS total"),
+          "orders.created_at",
+          "orders.updated_at"
+        )
+        .join("products", "products.id", "orders.product_id")
+        .where({ table_session_id })
+        .orderBy("orders.created_at", "desc");
+
+      return response.json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async show(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { table_session_id } = request.params;
+
+      const order = await knex("orders")
+        .select(
+          knex.raw(
+            "COALESCE(SUM(orders.quantity * orders.price),0) AS total"
+          ),
+           knex.raw(
+            "COALESCE(SUM(orders.quantity),0) AS quantity"
+          )
+        )
+        .where({
+          table_session_id,
+        })
+        .first();
+
+      return response.json(order);
     } catch (error) {
       next(error);
     }
